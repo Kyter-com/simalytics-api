@@ -22,7 +22,7 @@ export default $config({
     api.route("POST /oauth", {
       handler: "functions/oauth.handler",
       runtime: "nodejs20.x",
-      name: `${$app.name}-${$app.stage}-oauth`,
+      name: `${$app.stage}-oauth`,
       link: [SimklClientSecret],
     });
     // TODO: Biome
