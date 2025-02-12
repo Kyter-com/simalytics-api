@@ -14,6 +14,7 @@ export default $config({
       },
     };
   },
+
   async run() {
     const api = new sst.aws.ApiGatewayV2("simalytics-api");
 
@@ -24,7 +25,12 @@ export default $config({
       runtime: "nodejs20.x",
       name: `${$app.name}-${$app.stage}-oauth`,
       link: [SimklClientSecret],
+      logging: {
+        retention: "1 year",
+      },
     });
     // TODO: Biome
   },
 });
+// TODO: GitHub Actions
+// TODO: Dependabot
