@@ -25,7 +25,12 @@ export default $config({
       runtime: "nodejs20.x",
       name: `${$app.stage}-oauth`,
       link: [SimklClientSecret],
+      logging: {
+        retention: "1 year",
+      },
     });
     // TODO: Biome
   },
 });
+// TODO: GitHub Actions
+// TODO: Dependabot
