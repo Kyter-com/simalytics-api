@@ -5,6 +5,14 @@
 
 declare module "sst" {
   export interface Resource {
+    "SimklClientSecret": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
+    "simalytics-api": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />

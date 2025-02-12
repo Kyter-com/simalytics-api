@@ -23,7 +23,7 @@ export default $config({
     api.route("POST /oauth", {
       handler: "functions/oauth.handler",
       runtime: "nodejs20.x",
-      name: `${$app.stage}-oauth`,
+      name: `${$app.name}-${$app.stage}-oauth`,
       link: [SimklClientSecret],
       logging: {
         retention: "1 year",
