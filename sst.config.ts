@@ -14,6 +14,7 @@ export default $config({
       },
     };
   },
+
   async run() {
     const api = new sst.aws.ApiGatewayV2("simalytics-api");
 
