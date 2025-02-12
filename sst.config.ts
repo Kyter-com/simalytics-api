@@ -16,7 +16,13 @@ export default $config({
   },
 
   async run() {
-    const api = new sst.aws.ApiGatewayV2("simalytics-api");
+    const api = new sst.aws.ApiGatewayV2("simalytics-api", {
+      domain: {
+        cert: "arn:aws:acm:us-east-2:974468860722:certificate/ee315262-c2a4-4bc0-97fc-5d000c9dcaf0",
+        name: "api.simalytics.kyter.com",
+        dns: false,
+      },
+    });
 
     const SimklClientSecret = new sst.Secret("SimklClientSecret");
 
