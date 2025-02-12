@@ -7,6 +7,11 @@ export default $config({
       removal: input?.stage === "prod" ? "retain" : "remove",
       protect: ["prod"].includes(input?.stage),
       home: "aws",
+      providers: {
+        aws: {
+          region: "us-east-2",
+        },
+      },
     };
   },
   async run() {},
