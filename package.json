@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sst": "^3.8.4"
+    "sst": "^3.8.5"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.145"
