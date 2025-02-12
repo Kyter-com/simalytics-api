@@ -9,6 +9,9 @@ export const handler = async (event: APIGatewayEvent) => {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: "No code provided" }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
   }
 
@@ -29,8 +32,17 @@ export const handler = async (event: APIGatewayEvent) => {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
   });
 
-  return { statusCode: 200, body: JSON.stringify(res) };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(res),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 };
