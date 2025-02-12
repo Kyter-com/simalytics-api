@@ -14,5 +14,17 @@ export default $config({
       },
     };
   },
-  async run() {},
+  async run() {
+    const api = new sst.aws.ApiGatewayV2("simalytics-api");
+
+    const SimklClientSecret = new sst.Secret("SimklClientSecret");
+
+    api.route("POST /oauth", {
+      handler: "functions/oauth.handler",
+      runtime: "nodejs20.x",
+      name: `${$app.name}-${$app.stage}-oauth`,
+      link: [SimklClientSecret],
+    });
+    // TODO: Biome
+  },
 });
