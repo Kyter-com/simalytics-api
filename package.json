@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ofetch": "^1.4.1",
-    "sst": "^3.9.5"
+    "sst": "^3.9.5",
+    "ofetch": "^1.4.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
