@@ -29,8 +29,5 @@ export default $config({
         retention: "1 year",
       },
     });
-    // TODO: Biome
   },
 });
-// TODO: GitHub Actions
-// TODO: Dependabot
