@@ -10,11 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sst": "^3.9.28",
+    "sst": "^3.11.11",
     "ofetch": "^1.4.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/aws-lambda": "^8.10.145"
+    "@types/aws-lambda": "^8.10.148"
   }
 }
