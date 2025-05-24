@@ -9,6 +9,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "TmdbApiKey": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "simalytics-api": {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
