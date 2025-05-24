@@ -19,12 +19,23 @@ export default $config({
     const api = new sst.aws.ApiGatewayV2("simalytics-api");
 
     const SimklClientSecret = new sst.Secret("SimklClientSecret");
+    const TmdbApiKey = new sst.Secret("TmdbApiKey");
 
     api.route("POST /oauth", {
       handler: "functions/oauth.handler",
       runtime: "nodejs20.x",
       name: `${$app.name}-${$app.stage}-oauth`,
       link: [SimklClientSecret],
+      logging: {
+        retention: "1 year",
+      },
+    });
+
+    api.route("POST /tmdb-proxy", {
+      handler: "functions/tmdb-proxy.handler",
+      runtime: "nodejs20.x",
+      name: `${$app.name}-${$app.stage}-tmdb-proxy`,
+      link: [TmdbApiKey],
       logging: {
         retention: "1 year",
       },
