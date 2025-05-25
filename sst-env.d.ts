@@ -9,6 +9,10 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
+    "TmdbAccessToken": {
+      "type": "sst.sst.Secret"
+      "value": string
+    }
     "TmdbApiKey": {
       "type": "sst.sst.Secret"
       "value": string

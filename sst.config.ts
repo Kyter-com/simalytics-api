@@ -20,6 +20,7 @@ export default $config({
 
     const SimklClientSecret = new sst.Secret("SimklClientSecret");
     const TmdbApiKey = new sst.Secret("TmdbApiKey");
+    const TmdbAccessToken = new sst.Secret("TmdbAccessToken");
 
     api.route("POST /oauth", {
       handler: "functions/oauth.handler",
@@ -35,7 +36,7 @@ export default $config({
       handler: "functions/tmdb-proxy.handler",
       runtime: "nodejs20.x",
       name: `${$app.name}-${$app.stage}-tmdb-proxy`,
-      link: [TmdbApiKey],
+      link: [TmdbApiKey, TmdbAccessToken],
       logging: {
         retention: "1 year",
       },
