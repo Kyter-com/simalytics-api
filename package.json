@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "sst": "^3.17.0",
+    "sst": "^3.17.3",
     "ofetch": "^1.4.1"
   },
   "devDependencies": {
