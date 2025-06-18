@@ -14,7 +14,7 @@
     "ofetch": "^1.4.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/aws-lambda": "^8.10.149"
+    "@biomejs/biome": "2.0.0",
+    "@types/aws-lambda": "^8.10.150"
   }
 }
