@@ -4,16 +4,7 @@ import type { APIGatewayEvent } from "aws-lambda";
 
 export const handler = async (event: APIGatewayEvent) => {
   const body = JSON.parse(event.body || "{}") as unknown as { code: string };
-  if (!body?.code) {
-    console.log("Error: no code provided");
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "No code provided" }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-  }
+  console.log(body);
 
   const res = await ofetch("https://api.simkl.com/oauth/token", {
     method: "POST",
@@ -27,16 +18,8 @@ export const handler = async (event: APIGatewayEvent) => {
       client_id:
         "c387a1e6b5cf2151af039a466c49a6b77891a4134aed1bcb1630dd6b8f0939c9",
     },
-  }).catch((error) => {
-    console.log(error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
   });
+  console.log(res);
 
   return {
     statusCode: 200,
