@@ -26,6 +26,8 @@ export default $config({
       handler: "functions/oauth.handler",
       runtime: "nodejs20.x",
       name: `${$app.name}-${$app.stage}-oauth`,
+      timeout: "2 minutes",
+      memory: "512 MB",
       link: [SimklClientSecret],
       logging: {
         retention: "1 year",
@@ -35,6 +37,8 @@ export default $config({
     api.route("POST /tmdb-proxy", {
       handler: "functions/tmdb-proxy.handler",
       runtime: "nodejs20.x",
+      timeout: "2 minutes",
+      memory: "512 MB",
       name: `${$app.name}-${$app.stage}-tmdb-proxy`,
       link: [TmdbApiKey, TmdbAccessToken],
       logging: {
