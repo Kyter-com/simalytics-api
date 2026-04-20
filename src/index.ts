@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { ofetch } from "ofetch";
 
 type Bindings = {
 	SIMKL_CLIENT_SECRET: string;
@@ -15,20 +14,25 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.post("/oauth", async (c) => {
 	const { code } = await c.req.json<{ code: string }>();
 
-	const res = await ofetch<unknown>("https://api.simkl.com/oauth/token", {
+	const simklRes = await fetch("https://api.simkl.com/oauth/token", {
 		method: "POST",
-		retry: 2,
-		retryDelay: 1000,
-		body: {
+		headers: { "Content-Type": "application/json" },
+		body: JSON.stringify({
 			code,
 			redirect_uri: "simalytics://",
 			grant_type: "authorization_code",
 			client_secret: c.env.SIMKL_CLIENT_SECRET,
 			client_id: SIMKL_CLIENT_ID,
-		},
+		}),
 	});
 
-	return c.json(res as Record<string, unknown>);
+	return new Response(simklRes.body, {
+		status: simklRes.status,
+		headers: {
+			"Content-Type":
+				simklRes.headers.get("Content-Type") ?? "application/json",
+		},
+	});
 });
 
 app.post("/tmdb-proxy", async (c) => {
@@ -40,7 +44,7 @@ app.post("/tmdb-proxy", async (c) => {
 		return c.json({ error: "No auth provided" }, 400);
 	}
 
-	const res = await fetch(
+	const tmdbRes = await fetch(
 		`https://api.themoviedb.org/3/${type}/${id}/watch/providers`,
 		{
 			headers: {
@@ -49,7 +53,13 @@ app.post("/tmdb-proxy", async (c) => {
 		},
 	);
 
-	return c.json((await res.json()) as Record<string, unknown>);
+	return new Response(tmdbRes.body, {
+		status: tmdbRes.status,
+		headers: {
+			"Content-Type":
+				tmdbRes.headers.get("Content-Type") ?? "application/json",
+		},
+	});
 });
 
 export default app;
