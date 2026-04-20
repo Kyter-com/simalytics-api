@@ -36,28 +36,35 @@ app.post("/oauth", async (c) => {
 });
 
 app.post("/tmdb-proxy", async (c) => {
-	const auth = c.req.header("authorization")?.split(" ")[1];
+	const token = c.req.header("authorization")?.split(" ")[1];
 	const type = c.req.header("x-type");
 	const id = c.req.header("x-id");
 
-	if (!auth || !type || !id) {
-		return c.json({ error: "No auth provided" }, 400);
-	}
+	if (!token) return c.json({ error: "Missing Authorization header" }, 401);
+	if (type !== "movie" && type !== "tv")
+		return c.json({ error: "Invalid x-type (expected 'movie' or 'tv')" }, 400);
+	if (!id || !/^\d+$/.test(id))
+		return c.json({ error: "Invalid x-id (expected numeric)" }, 400);
+
+	const verifyRes = await fetch("https://api.simkl.com/users/settings", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"simkl-api-key": SIMKL_CLIENT_ID,
+		},
+	});
+	if (!verifyRes.ok) return c.json({ error: "Invalid Simkl token" }, 401);
 
 	const tmdbRes = await fetch(
 		`https://api.themoviedb.org/3/${type}/${id}/watch/providers`,
 		{
-			headers: {
-				Authorization: `Bearer ${c.env.TMDB_ACCESS_TOKEN}`,
-			},
+			headers: { Authorization: `Bearer ${c.env.TMDB_ACCESS_TOKEN}` },
 		},
 	);
 
 	return new Response(tmdbRes.body, {
 		status: tmdbRes.status,
 		headers: {
-			"Content-Type":
-				tmdbRes.headers.get("Content-Type") ?? "application/json",
+			"Content-Type": tmdbRes.headers.get("Content-Type") ?? "application/json",
 		},
 	});
 });
