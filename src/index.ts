@@ -69,4 +69,38 @@ app.post("/tmdb-proxy", async (c) => {
 	});
 });
 
+app.post("/tmdb-credits", async (c) => {
+	const token = c.req.header("authorization")?.split(" ")[1];
+	const type = c.req.header("x-type");
+	const id = c.req.header("x-id");
+
+	if (!token) return c.json({ error: "Missing Authorization header" }, 401);
+	if (type !== "movie" && type !== "tv")
+		return c.json({ error: "Invalid x-type (expected 'movie' or 'tv')" }, 400);
+	if (!id || !/^\d+$/.test(id))
+		return c.json({ error: "Invalid x-id (expected numeric)" }, 400);
+
+	const verifyRes = await fetch("https://api.simkl.com/users/settings", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"simkl-api-key": SIMKL_CLIENT_ID,
+		},
+	});
+	if (!verifyRes.ok) return c.json({ error: "Invalid Simkl token" }, 401);
+
+	const tmdbRes = await fetch(
+		`https://api.themoviedb.org/3/${type}/${id}/credits`,
+		{
+			headers: { Authorization: `Bearer ${c.env.TMDB_ACCESS_TOKEN}` },
+		},
+	);
+
+	return new Response(tmdbRes.body, {
+		status: tmdbRes.status,
+		headers: {
+			"Content-Type": tmdbRes.headers.get("Content-Type") ?? "application/json",
+		},
+	});
+});
+
 export default app;
