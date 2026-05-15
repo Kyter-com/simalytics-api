@@ -11,12 +11,12 @@
 		"format": "biome format --write ."
 	},
 	"dependencies": {
-		"hono": "^4.12.14"
+		"hono": "^4.12.18"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.12",
-		"@cloudflare/workers-types": "^4.20260420.1",
+		"@biomejs/biome": "^2.4.15",
+		"@cloudflare/workers-types": "^4.20260515.1",
 		"typescript": "^6.0.3",
-		"wrangler": "^4.84.0"
+		"wrangler": "^4.91.0"
 	}
 }
