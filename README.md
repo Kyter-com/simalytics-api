@@ -9,6 +9,10 @@ Backend for [Simalytics](https://github.com/Kyter-com/simalytics-ios), running o
   - `Authorization: Bearer <simkl access token>` — validated against Simkl before the TMDB call
   - `x-type: movie | tv`
   - `x-id: <tmdb id>` (numeric)
+- `POST /tmdb-credits` — Fetches TMDB cast and crew credits for a movie or TV show. Requires the same headers as `/tmdb-proxy`.
+- `POST /tmdb-person` — Fetches TMDB person details with combined movie and TV credits. Requires:
+  - `Authorization: Bearer <simkl access token>` — validated against Simkl before the TMDB call
+  - `x-id: <tmdb person id>` (numeric)
 
 ## Stack
 

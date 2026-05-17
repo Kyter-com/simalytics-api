@@ -11,6 +11,27 @@ const SIMKL_CLIENT_ID =
 
 const app = new Hono<{ Bindings: Bindings }>();
 
+async function verifySimklToken(token: string): Promise<boolean> {
+	const verifyRes = await fetch("https://api.simkl.com/users/settings", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			"simkl-api-key": SIMKL_CLIENT_ID,
+		},
+	});
+
+	return verifyRes.ok;
+}
+
+function tmdbResponse(response: Response): Response {
+	return new Response(response.body, {
+		status: response.status,
+		headers: {
+			"Content-Type":
+				response.headers.get("Content-Type") ?? "application/json",
+		},
+	});
+}
+
 app.post("/oauth", async (c) => {
 	const { code } = await c.req.json<{ code: string }>();
 
@@ -46,13 +67,8 @@ app.post("/tmdb-proxy", async (c) => {
 	if (!id || !/^\d+$/.test(id))
 		return c.json({ error: "Invalid x-id (expected numeric)" }, 400);
 
-	const verifyRes = await fetch("https://api.simkl.com/users/settings", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-			"simkl-api-key": SIMKL_CLIENT_ID,
-		},
-	});
-	if (!verifyRes.ok) return c.json({ error: "Invalid Simkl token" }, 401);
+	if (!(await verifySimklToken(token)))
+		return c.json({ error: "Invalid Simkl token" }, 401);
 
 	const tmdbRes = await fetch(
 		`https://api.themoviedb.org/3/${type}/${id}/watch/providers`,
@@ -61,12 +77,7 @@ app.post("/tmdb-proxy", async (c) => {
 		},
 	);
 
-	return new Response(tmdbRes.body, {
-		status: tmdbRes.status,
-		headers: {
-			"Content-Type": tmdbRes.headers.get("Content-Type") ?? "application/json",
-		},
-	});
+	return tmdbResponse(tmdbRes);
 });
 
 app.post("/tmdb-credits", async (c) => {
@@ -80,13 +91,8 @@ app.post("/tmdb-credits", async (c) => {
 	if (!id || !/^\d+$/.test(id))
 		return c.json({ error: "Invalid x-id (expected numeric)" }, 400);
 
-	const verifyRes = await fetch("https://api.simkl.com/users/settings", {
-		headers: {
-			Authorization: `Bearer ${token}`,
-			"simkl-api-key": SIMKL_CLIENT_ID,
-		},
-	});
-	if (!verifyRes.ok) return c.json({ error: "Invalid Simkl token" }, 401);
+	if (!(await verifySimklToken(token)))
+		return c.json({ error: "Invalid Simkl token" }, 401);
 
 	const tmdbRes = await fetch(
 		`https://api.themoviedb.org/3/${type}/${id}/credits`,
@@ -95,12 +101,28 @@ app.post("/tmdb-credits", async (c) => {
 		},
 	);
 
-	return new Response(tmdbRes.body, {
-		status: tmdbRes.status,
-		headers: {
-			"Content-Type": tmdbRes.headers.get("Content-Type") ?? "application/json",
+	return tmdbResponse(tmdbRes);
+});
+
+app.post("/tmdb-person", async (c) => {
+	const token = c.req.header("authorization")?.split(" ")[1];
+	const id = c.req.header("x-id");
+
+	if (!token) return c.json({ error: "Missing Authorization header" }, 401);
+	if (!id || !/^\d+$/.test(id))
+		return c.json({ error: "Invalid x-id (expected numeric)" }, 400);
+
+	if (!(await verifySimklToken(token)))
+		return c.json({ error: "Invalid Simkl token" }, 401);
+
+	const tmdbRes = await fetch(
+		`https://api.themoviedb.org/3/person/${id}?append_to_response=combined_credits`,
+		{
+			headers: { Authorization: `Bearer ${c.env.TMDB_ACCESS_TOKEN}` },
 		},
-	});
+	);
+
+	return tmdbResponse(tmdbRes);
 });
 
 export default app;
