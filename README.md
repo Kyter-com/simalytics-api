@@ -18,6 +18,14 @@ Backend for [Simalytics](https://github.com/Kyter-com/simalytics-ios), running o
 
 Hono + Wrangler. No database, no build step beyond TypeScript.
 
+## Data handling
+
+- The Worker has no application database and does not intentionally persist Simkl authorization codes or access tokens.
+- `POST /oauth` forwards the authorization code to Simkl and streams Simkl's response back to the app.
+- TMDB proxy routes validate the supplied access token against Simkl for the duration of the request, then fetch the requested TMDB data.
+- Cloudflare Workers observability is enabled for operational monitoring. Cloudflare may process request metadata and logs according to the account's configured observability and retention settings.
+- Do not add request-body or authorization-header logging. Any future persistence, analytics, or new third-party data flow must be reflected in the Simalytics privacy policy and App Store privacy declaration.
+
 ## Develop
 
 ```
