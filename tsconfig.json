@@ -10,7 +10,7 @@
 		"noEmit": true,
 		"isolatedModules": true,
 		"allowSyntheticDefaultImports": true,
-		"types": ["@cloudflare/workers-types"]
+		"types": ["./worker-configuration.d.ts", "node"]
 	},
 	"include": ["src/**/*.ts", "worker-configuration.d.ts"]
 }
